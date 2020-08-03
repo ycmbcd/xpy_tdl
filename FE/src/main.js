@@ -21,7 +21,8 @@ Vue.use(HeyUI)
 import Global from './Global'
 Vue.use(Global)
 
-Vue.prototype.$server = 'http://ycmbcd.com:888'
+// Vue.prototype.$server = 'http://tdl.cc'
+Vue.prototype.$server = ''
 
 new Vue({
     el: '#app',

@@ -7,7 +7,7 @@
       <!-- 周报 -->
       <button class="h-btn ml5" @click="downWeek()">
         <i class="h-icon-inbox green"></i>
-        <span>本页周报</span>
+        <span>周报</span>
       </button>
       <!-- 月控件 -->
       <DatePicker style="width: 86px" class="ml20" v-model="changeMonth" type="month" :clearable="clearable" readonly></DatePicker>
@@ -37,17 +37,17 @@
 
     <!-- ToDoList -->
     <table class="table mt20">
-      <tr class="table_th">
-        <td style="width:90px;" class="tagc">星 期</td>
-        <td style="width:116px;" class="tagc">日 期</td>
-        <td style="width:600px;">工作内容</td>
-        <td style="width:180px;">月报类型</td>
-        <td style="width:100px;" class="tagc">完成成果</td>
-        <td style="width:130px;" class="tagr">工时（小时）</td>
-        <td style="width:130px;" class="tagr">加班（小时）</td>
-        <td>存在问题</td>
-        <td>拟采取措施</td>
-        <td style="width:90px;" class="tagc">操作</td>
+      <tr class="table_th f12">
+        <td style="width:5%" class="tagc">星 期</td>
+        <td style="width:7%" class="tagc">日 期</td>
+        <td style="">工作内容</td>
+        <td style="width:12%">月报类型</td>
+        <td style="width:5%" class="tagc">完成成果</td>
+        <td style="width:6%" class="tagr">工时/h</td>
+        <td style="width:6%" class="tagr">加班/h</td>
+        <td style="width:8%">存在问题</td>
+        <td style="width:8%">采取措施</td>
+        <td style="width:5%" class="tagc">操作</td>
       </tr>
       <tr v-for="item of listData" :key="item.id">
         <td class="tagc">
@@ -96,7 +96,7 @@
     <!-- 下载模态框 -->
     <Modal v-model="weekDown">
       <div slot="header" class="green bold">下载{{ downTxt }}</div>
-      <div style="width: 400px;">您的「{{ downTxt }}」已生成，干得漂亮！</div>
+      <div style="width: 400px;">您的「{{ downTxt }}」已生成：{{tableName}}</div>
       <div slot="footer">
         <a :href="weekUrl" :download="tableName" @click="weekDown = false">
           <Button class="h-btn h-btn-green">
@@ -137,12 +137,12 @@ export default {
         size: 7,
         total: 0
       },
-      nowPage: 0,
-      nowSize: 0,
+      nowPage: 1,
+      nowSize: 7,
       changeMonth: '',
       changeYear: '',
       clearable: false,
-      weekUrl: ''
+      weekUrl: '',
     };
   },
   components: {
@@ -153,6 +153,7 @@ export default {
   },
   watch: {
     datePicker(newVal){
+      console.log(newVal);
       let _this = this;
       _this.startDate = newVal.start;
       _this.endDate = newVal.end;
@@ -163,20 +164,19 @@ export default {
     // 周报
     downWeek(toPage){
       let _this = this;
+    console.log(_this.startDate+' '+_this.endDate)
       _this.$Loading(); // loading
       let qsData = qs.stringify({
         down_week: "",
         startDate: _this.startDate,
         endDate: _this.endDate,
-        nowPage: _this.nowPage,
-        nowSize: _this.nowSize,
       });
 
       _this.$axios
         .post("/api/down_week.php", qsData)
         .then(function (res) {
           _this.downTxt = '周报';
-          _this.tableName = '工作周报.xlsx';
+          _this.tableName = `${_this.$store.state.storeuName}工作周报${_this.startDate}→${_this.endDate}.xlsx`;
           _this.weekUrl = _this.$server + '/down/' + res.data;
           setTimeout(() => {
             _this.$Loading.close(); // 关闭loading
@@ -190,15 +190,13 @@ export default {
 
     // 获取ToDoList
     getTDL(toPage) {
-      let cur = 1;
-      let size = 7;
-      if(toPage){
-        cur = toPage.cur,
-        size = toPage.size
-      }
       let _this = this;
-      _this.nowPage = cur;
-      _this.nowSize = size;
+
+      if(toPage){
+        _this.nowPage = toPage.cur,
+        _this.nowSize = toPage.size
+      }
+      
       let qsData = qs.stringify({
         get_tdl: "",
         startDate: _this.startDate,
@@ -263,12 +261,12 @@ export default {
   height: 30px;
   line-height: 30px;
   border-collapse: collapse;
-  margin-bottom: 200px;
+  margin-bottom: 100px;
 }
 
 .table td {
+  padding 0 6px
   border: 1px solid #dedede;
-  padding: 4px 20px;
 }
 
 .table_th {
@@ -278,7 +276,7 @@ export default {
 }
 .pageBar{
   position fixed;
-  bottom: 100px;
+  bottom: 40px;
   right: 70px;
   background #FFF;
   padding: 8px 20px;

@@ -10,12 +10,27 @@ const store = new Vuex.Store({
       pingStatus: 'Ready',
       storeEditModal: false,
       storeDelModal: false,
+      storeuID: '',
+      storeuName: '',
+      storeuType:''
     },
     mutations:{
       // ping
       pingStatus(state, status) {
         state.pingStatus = status;
         sessionStorage.setItem('accessToken', status)
+      },
+      // 用户名
+      storeuName(state, status) {
+        state.storeuName = status;
+      },
+      // 用户ID
+      storeuID(state, status) {
+        state.storeuID = status;
+      },
+      // 用户类型
+      storeuType(state, status) {
+        state.storeuType = status;
       },
       // 编辑modal
       storeEditModal(state, status) {

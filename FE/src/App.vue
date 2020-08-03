@@ -30,7 +30,7 @@
             <span class="h-menu-show-desc">修改密码</span>
           </div>
         </router-link>
-        <router-link exact to="/UserManage" tag="li" class="h-menu-li">
+        <router-link exact to="/UserManage" tag="li" class="h-menu-li" v-show="$store.state.storeuType === 'admin'">
           <div content="员工管理" placement="right" class="h-menu-show">
             <span class="h-menu-show-icon">
               <i class="h-icon-users"></i>
@@ -47,7 +47,7 @@
       <div
         class="u_info f_right"
         v-show="$store.state.pingStatus == 'Running'"
-      >工号：{{ uID }}&nbsp;&nbsp;&nbsp;&nbsp;姓名：{{ uName }}</div>
+      >工号：{{ $store.state.storeuID }} &nbsp;&nbsp;&nbsp;&nbsp;姓名：{{ $store.state.storeuName }}</div>
       <div class="clear"></div>
     </HHeader>
     <!-- 内容 -->
@@ -74,9 +74,10 @@
     </Content>
     <!-- 页脚 -->
     <HFooter class="tdl_footer text-center">
-      Copyright © {{year}}
-      <a href="https://github.com/ycmbcd" target="_blank">ycmbcd</a> /
+      Copyright &copy; {{year}}
+      <a href="https://github.com/ycmbcd/xpy_tdl" target="_blank"><i class="h-icon-github"></i> ycmbcd </a> /
       <span>{{$store.state.pingStatus}}</span>
+      <span v-show="$store.state.storeuType === 'admin'" class="red">管理员</span>
     </HFooter>
   </Layout>
 </template>
@@ -88,8 +89,6 @@ export default {
   data: function () {
     return {
       boxHeight: "",
-      uName: "1",
-      uID: "2",
       year: new Date().getFullYear(),
       headerFixed: true,
       nowPageTxt: "任务列表",
@@ -109,16 +108,27 @@ export default {
   mounted () {
     this.setHeight();
     this.$ping();
+    // console.log(this.$store.state);
   },
 };
 </script>
 
 <style lang="stylus">
+.h-menu-dark,.h-layout-header-theme-dark{
+  background #444 !important
+}
+.layout .h-layout-header{
+  height 54px
+}
+.layout .layout-logo{
+  line-height 23px
+}
 .h-notify .h-notify-mask{
   background rgba(0,0,0,.3) !important
 }
 .u_info {
-  line-height: 64px;
+  line-height: 54px;
+  font-size: 16px;
 }
 .bold
   font-weight bold
@@ -126,7 +136,7 @@ export default {
 .logout {
   width: 100px;
   text-align: right;
-  line-height: 64px;
+  line-height: 54px;
   font-size: 16px;
 }
 
@@ -138,7 +148,7 @@ export default {
 .h-menu {
   float: left;
   width: 60% !important;
-  line-height: 34px !important;
+  line-height: 24px !important;
   font-size: 16px;
 }
 
@@ -186,6 +196,9 @@ export default {
 .ml20{
   margin-left 20px;
 }
+.f12{
+  font-size 12px
+}
 .red {
   color #F30;
 }
@@ -231,8 +244,10 @@ export default {
 .tdl_footer{
   position fixed
   bottom 0
-  width 100%
-  background rgba(0, 88, 44,.1)
   z-index 120
+  padding 6px !important;
+  width: 80%;
+  margin-left 10%;
+  background rgba(255,255,255,.75);
 }
 </style>

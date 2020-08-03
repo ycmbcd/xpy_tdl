@@ -52,9 +52,10 @@ export default {
           if (res.data == "ban") {
             _this.$Notice["error"](`账号密码不匹配，请重试！`);
           } else if (res.data == "go") {
-            _this.$Notice["success"](`你好！`);
+            _this.$ping();
             _this.$store.commit("pingStatus", "Running");
             _this.$router.push("ToDoList");
+            _this.$Notice["success"](`欢迎您，${_this.$store.state.storeuName}！`);
           }
         })
         .catch((error) => {

@@ -32,8 +32,9 @@ export default {
         .then((res) => {
           console.log(res);
           if (res.data.status === "ing") {
-            _this.uName = res.data.u_name;
-            _this.uID = res.data.u_id;
+            _this.$store.commit("storeuName", res.data.u_name);
+            _this.$store.commit("storeuID", res.data.u_id);
+            _this.$store.commit("storeuType", res.data.u_type);
             _this.$store.commit("pingStatus", "Running");
             // 如果是运行状态，且在登录界面
             if (_this.$route.path == "/") {

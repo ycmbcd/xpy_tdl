@@ -9,7 +9,7 @@ $db = new PdoMySQL();
 if(isset($_POST['login'])){
     $u_id = addslashes($_POST['u_id']);
     $u_pwd = addslashes($_POST['u_pwd']);
-    $sql = "SELECT u_pwd,u_name FROM tdl_user WHERE u_id = '{$u_id}'";
+    $sql = "SELECT u_pwd,u_name,u_type FROM tdl_user WHERE u_id = '{$u_id}'";
     $res = $db->getOne($sql);
     if(empty($res)){
         echo 'ban';
@@ -18,6 +18,7 @@ if(isset($_POST['login'])){
             $_SESSION['xpy_tdl'] = 'ing';
             $_SESSION['u_name'] = $res['u_name'];
             $_SESSION['u_id'] = $u_id;
+            $_SESSION['u_type'] = $res['u_type'];
             echo 'go';
         }else{
             echo 'ban';
@@ -32,6 +33,7 @@ if(isset($_GET['ping'])){
         $final_res['status'] = 'ing';
         $final_res['u_name'] = $_SESSION['u_name'];
         $final_res['u_id'] = $_SESSION['u_id'];
+        $final_res['u_type'] = $_SESSION['u_type'];
         echo json_encode($final_res);
     }else{
       echo 'Ready';

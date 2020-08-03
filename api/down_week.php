@@ -10,11 +10,7 @@ if(isset($_POST['down_week'])){
   // 日期限制
   $startDate = addslashes($_POST['startDate']);
   $endDate = addslashes($_POST['endDate']);
-  // 分页限制
-  $nowPage = addslashes($_POST['nowPage']);
-  $nowSize = addslashes($_POST['nowSize']);
-  $start = ($nowPage-1) * $nowSize;
-  $end = $nowSize;
+
   // 如果日期不完全，返回空
   if($startDate == '' or $endDate == ''){
     echo 'error_date';
@@ -80,7 +76,7 @@ if(isset($_POST['down_week'])){
 
     $u_id = $_SESSION['u_id'];
     // 查询数据
-    $sql = "SELECT * FROM tdl_list WHERE u_id = '{$u_id}' AND t_date BETWEEN '{$startDate}' AND '{$endDate}' ORDER BY id LIMIT {$start}, {$end}";
+    $sql = "SELECT * FROM tdl_list WHERE u_id = '{$u_id}' AND t_date BETWEEN '{$startDate}' AND '{$endDate}' ORDER BY id DESC";
     $res = $db->getAll($sql);
 
     $j=4;
@@ -95,7 +91,7 @@ if(isset($_POST['down_week'])){
         $j++;
     }
 
-    $table_name = 'week_table_'.$u_id.'.xlsx';
+    $table_name = 'week_table_'.$u_id.'_'.time().'.xlsx';
     // $objPHPExcel->getActiveSheet()->getColumnDimension()->setAutoSize(true);
     $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
     $objWriter->save("../down/".$table_name);   //保存在服务器
