@@ -1,7 +1,6 @@
 <template>
   <button class="h-btn" @click="getType();newType = '';typePanel = true">
-    <i class="h-icon-setting"></i>
-    <span>月报类型设置</span>
+    <span><v-icon name="cog" spin/> 月报类型设置</span>
     <!-- 月报类型 -->
     <Modal v-model="typePanel">
       <div slot="header">月报类型</div>
@@ -110,6 +109,10 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
+.fa-icon{
+  width 12px
+  height 13px
+}
 .table
   width: 100%
   height: 30px
