@@ -55,7 +55,7 @@ export default {
             _this.$ping();
             _this.$store.commit("pingStatus", "Running");
             _this.$router.push("ToDoList");
-            _this.$Notice["success"](`欢迎您，${_this.$store.state.storeuName}！`);
+            _this.$Notice["success"](`欢迎使用：ToDoList！`);
           }
         })
         .catch((error) => {

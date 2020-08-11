@@ -208,6 +208,9 @@ export default {
 .yellow{
   color: #F60
 }
+.gray{
+  color: #666
+}
 .green
   color green
 .mt40 {

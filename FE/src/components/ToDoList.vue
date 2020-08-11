@@ -12,14 +12,14 @@
       <!-- 月控件 -->
       <DatePicker style="width: 86px" class="ml20" v-model="changeMonth" type="month" :clearable="clearable" readonly></DatePicker>
       <!-- 月报 -->
-      <button class="h-btn ml5">
+      <button class="h-btn ml5" @click="downMonth()">
         <v-icon name="moon" style="width: 12px;height: 12px;" class="blue" />
         <span>月报</span>
       </button>
       <!-- 年控件 -->
       <DatePicker style="width: 66px" class="ml20" v-model="changeYear" type="year" :clearable="clearable" readonly></DatePicker>
       <!-- 年报 -->
-      <button class="h-btn ml5">
+      <button class="h-btn ml5" @click="downYear()">
         <v-icon name="inbox" style="width: 12px;height: 12px;" class="yellow" />
         <span>年报</span>
       </button>
@@ -38,6 +38,7 @@
     <!-- ToDoList -->
     <table class="table mt20">
       <tr class="table_th f12">
+        <td style="width:3%" class="tagc">序号</td>
         <td style="width:5%" class="tagc">星 期</td>
         <td style="width:7%" class="tagc">日 期</td>
         <td style="">工作内容</td>
@@ -49,7 +50,8 @@
         <td style="width:8%">采取措施</td>
         <td style="width:5%" class="tagc">操作</td>
       </tr>
-      <tr v-for="item of listData" :key="item.id">
+      <tr v-for="(item, index) of listData" :key="item.id">
+        <td class="tagc gray bold">{{ index + 1 }}</td>
         <td class="tagc">
           <input type="hidden" :value="item.id" />
           {{item.t_week}}
@@ -94,16 +96,16 @@
     <delModal ref="childDel" />
 
     <!-- 下载模态框 -->
-    <Modal v-model="weekDown">
+    <Modal v-model="ExcelDown">
       <div slot="header" class="green bold">下载{{ downTxt }}</div>
-      <div style="width: 400px;">您的「{{ downTxt }}」已生成：{{tableName}}</div>
+      <div style="width: 400px;">「{{ downTxt }}」已生成：<span class="green">{{tableName}}</span></div>
       <div slot="footer">
-        <a :href="weekUrl" :download="tableName" @click="weekDown = false">
+        <a :href="weekUrl" :download="tableName" @click="ExcelDown = false">
           <Button class="h-btn h-btn-green">
             <i class="h-icon-inbox"></i> 下 载
           </Button>
         </a>
-        <button class="h-btn" @click="weekDown = false">
+        <button class="h-btn" @click="ExcelDown = false">
           <i class="h-icon-close"></i> 取 消
         </button>
       </div>
@@ -122,7 +124,7 @@ import moment from "moment";
 export default {
   data() {
     return {
-      weekDown: false,
+      ExcelDown: false,
       tableName:'',
       downTxt: '',
       datePicker:{},
@@ -131,14 +133,14 @@ export default {
       delId: '',
       startDate: '',
       endDate: '',
-      sizes: [7, 14, 21, 28],
+      sizes: [10, 20, 30, 40, 50, 60, 70, 80, 90],
       pageBar: {
         page: 1,
-        size: 7,
+        size: 10,
         total: 0
       },
       nowPage: 1,
-      nowSize: 7,
+      nowSize: 10,
       changeMonth: '',
       changeYear: '',
       clearable: false,
@@ -161,6 +163,52 @@ export default {
     }
   },
   methods: {
+    // 年报
+    downYear(){
+      let _this = this;
+      _this.$Loading(); // loading
+      let qsData = qs.stringify({
+        down_year: _this.changeYear
+      });
+
+      _this.$axios
+        .post("/api/down_year.php", qsData)
+        .then(function (res) {
+          _this.downTxt = '年报';
+          _this.tableName = `${_this.$store.state.storeuName}工作年报${_this.changeYear}.xlsx`;
+          _this.weekUrl = _this.$server + '/down/' + res.data;
+          setTimeout(() => {
+            _this.$Loading.close(); // 关闭loading
+            _this.ExcelDown = true;
+          }, 1000);
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+    },
+    // 月报
+    downMonth(){
+      let _this = this;
+      _this.$Loading(); // loading
+      let qsData = qs.stringify({
+        down_month: _this.changeMonth
+      });
+
+      _this.$axios
+        .post("/api/down_month.php", qsData)
+        .then(function (res) {
+          _this.downTxt = '月报';
+          _this.tableName = `${_this.$store.state.storeuName}工作月报${_this.changeMonth}.xlsx`;
+          _this.weekUrl = _this.$server + '/down/' + res.data;
+          setTimeout(() => {
+            _this.$Loading.close(); // 关闭loading
+            _this.ExcelDown = true;
+          }, 1000);
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+    },
     // 周报
     downWeek(toPage){
       let _this = this;
@@ -180,7 +228,7 @@ export default {
           _this.weekUrl = _this.$server + '/down/' + res.data;
           setTimeout(() => {
             _this.$Loading.close(); // 关闭loading
-            _this.weekDown = true;
+            _this.ExcelDown = true;
           }, 1000);
         })
         .catch(function (error) {

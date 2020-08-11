@@ -19,7 +19,7 @@
             type="button"
             class="h-btn h-btn-text-blue h-btn-s h-btn-no-border"
           >
-            <i class="h-icon-edit"></i>
+            <i v-show="item.u_id > 999" class="h-icon-edit"></i>
           </button>
         </td>
         <td class="tagc">
@@ -34,7 +34,9 @@
           </button>
         </td>
         <td class="tagc">
+          <span v-show="item.u_id < 1000">—</span>
           <button
+            v-show="item.u_id > 999"
             @click="delShow = true;setUName = item.u_name;setUID = item.u_id"
             type="button"
             class="h-btn h-btn-text-red h-btn-s h-btn-no-border"

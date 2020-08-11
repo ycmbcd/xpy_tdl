@@ -62,7 +62,7 @@ if(isset($_POST['down_week'])){
             ),
         ),
     );
-    $objPHPExcel->getActiveSheet()->getStyle('B2:H10')->applyFromArray($styleThinBlackBorderOutline);
+    // $objPHPExcel->getActiveSheet()->getStyle('B2:H10')->applyFromArray($styleThinBlackBorderOutline);
     
     $objSheet
       ->setCellValue("B2", "工作日志")
@@ -76,11 +76,21 @@ if(isset($_POST['down_week'])){
 
     $u_id = $_SESSION['u_id'];
     // 查询数据
-    $sql = "SELECT * FROM tdl_list WHERE u_id = '{$u_id}' AND t_date BETWEEN '{$startDate}' AND '{$endDate}' ORDER BY id DESC";
+    $sql = "SELECT * FROM tdl_list WHERE u_id = '{$u_id}' AND t_date BETWEEN '{$startDate}' AND '{$endDate}' ORDER BY t_date DESC";
     $res = $db->getAll($sql);
 
     $j=4;
+    $now_week = '';
+    $now_date = '';
     foreach ($res as $key => $value) {
+      if($now_week == $value['t_week'] && $now_date == $value['t_date']){
+        $value['t_week'] = '';
+        $value['t_date'] = '';
+      }else{
+        $now_week = $value['t_week'];
+        $now_date = $value['t_date'];
+      }
+
         $objSheet->setCellValue("B".$j,str_replace('星期','', $value['t_week']))
                 ->setCellValue("C".$j,str_replace('-', '/', $value['t_date']))
                 ->setCellValueExplicit("D".$j,$value['t_work'],PHPExcel_Cell_DataType::TYPE_STRING)
@@ -90,6 +100,10 @@ if(isset($_POST['down_week'])){
                 ->setCellValueExplicit("H".$j,$value['t_do'],PHPExcel_Cell_DataType::TYPE_STRING);
         $j++;
     }
+
+    $end_line = $j - 1;
+    // 应用边框
+    $objPHPExcel->getActiveSheet()->getStyle('B2:H'.$end_line)->applyFromArray($styleThinBlackBorderOutline);
 
     $table_name = 'week_table_'.$u_id.'_'.time().'.xlsx';
     // $objPHPExcel->getActiveSheet()->getColumnDimension()->setAutoSize(true);

@@ -68,7 +68,7 @@ if(isset($_POST['get_tdl'])){
   }else{
     $u_id = $_SESSION['u_id'];
     // 查询数据
-  $sql = "SELECT * FROM tdl_list WHERE u_id = '{$u_id}' AND t_date BETWEEN '{$startDate}' AND '{$endDate}' ORDER BY id DESC LIMIT {$start}, {$end}";
+  $sql = "SELECT * FROM tdl_list WHERE u_id = '{$u_id}' AND t_date BETWEEN '{$startDate}' AND '{$endDate}' ORDER BY t_date DESC LIMIT {$start}, {$end}";
     $res = $db->getAll($sql);
     $final_res['list'] = $res;
     // 查询个数
