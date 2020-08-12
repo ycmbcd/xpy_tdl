@@ -14,7 +14,7 @@
             <td>月报类型名称</td>
             <td class="tagc">操作</td>
           </tr>
-          <tr v-for="item of allType" :key="item.id">
+          <tr v-for="item of allType" :key="item.id" v-show="item.u_id != 0">
             <td>{{ item.m_type }}</td>
             <td class="tagc">
               <Button @click="delType(item.id)" class="h-btn-text-red h-btn-xs">删除</Button>

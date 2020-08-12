@@ -5,7 +5,7 @@ require_once("./access.php");
 require_once("./pdo/PdoMySQL.class.php");
 $db = new PdoMySQL();
 
-// 下载周报
+// 下载月报
 if(isset($_POST['down_month'])){
     // 获取月份
     $down_month = addslashes($_POST['down_month']);
@@ -60,7 +60,7 @@ if(isset($_POST['down_month'])){
         ->setCellValue("B2", $_SESSION['u_name'])
         ->setCellValue("A3", "序号")
         ->setCellValue("B3", "项目或工作内容")
-        ->setCellValue("C3", "工作天数（精确到0.5天）")
+        ->setCellValue("C3", "工作小时数")
         ->setCellValue("D3", "加班小时数");    //表头值
 
     $u_id = $_SESSION['u_id'];
@@ -69,7 +69,7 @@ if(isset($_POST['down_month'])){
     $endDate = $down_month.'-31';
 
     // 查询数据
-    $sql = "SELECT t_type,sum(t_time) AS sum_time,sum(t_time_other) AS sum_time_other FROM tdl_list WHERE u_id = '{$u_id}' AND t_date BETWEEN '{$startDate}' AND '{$endDate}' GROUP BY t_type DESC";
+    $sql = "SELECT t_type,sum(t_time) AS sum_time,sum(t_time_other) AS sum_time_other FROM tdl_list WHERE u_id = '{$u_id}' AND t_date BETWEEN '{$startDate}' AND '{$endDate}' GROUP BY t_type";
     $res = $db->getAll($sql);
 
     $j=4;

@@ -3,7 +3,9 @@ import Router from 'vue-router'
 import Login from '../components/Login.vue'
 import ToDoList from '../components/ToDoList.vue'
 import ChangePwd from '../components/ChangePwd.vue'
+import setCommonType from '../components/setCommonType.vue'
 import NoPage from '../components/NoPage.vue'
+import TableExcel from '../components/TableExcel.vue'
 import UserManage from '../components/UserManage.vue'
 
 Vue.use(Router)
@@ -40,11 +42,23 @@ const router = new Router({
       meta: { title: '账号管理', icon: 'h-icon-users' }
     },
     {
+      path: '/TableExcel',
+      name: 'TableExcel',
+      component: TableExcel,
+      meta: { title: '统计报表', icon: 'h-icon-inbox' }
+    },
+    {
+      path: '/setCommonType',
+      name: 'setCommonType',
+      component: setCommonType,
+      meta: { title: '公共月报类型', icon: 'h-icon-message' }
+    },
+    {
       path: '/ChangePwd',
       name: 'ChangePwd',
       component: ChangePwd,
       meta: { title: '修改密码', icon: 'h-icon-lock' }
-    }
+    },
   ],
   linkActiveClass: 'h-menu-li-selected' // 点击添加 active 类
 })

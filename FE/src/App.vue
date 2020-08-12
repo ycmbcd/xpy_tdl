@@ -22,20 +22,36 @@
             <span class="h-menu-show-desc">任务列表</span>
           </div>
         </router-link>
+        <router-link exact to="/TableExcel" tag="li" class="h-menu-li" v-show="$store.state.storeuType === 'admin'">
+          <div content="统计报表" placement="right" class="h-menu-show">
+            <span class="h-menu-show-icon">
+              <i class="h-icon-inbox"></i>
+            </span>
+            <span class="h-menu-show-desc">统计报表</span>
+          </div>
+        </router-link>
+        <router-link exact to="/setCommonType" tag="li" class="h-menu-li" v-show="$store.state.storeuType === 'admin'">
+          <div content="公共月报类型" placement="right" class="h-menu-show">
+            <span class="h-menu-show-icon">
+              <i class="h-icon-message"></i>
+            </span>
+            <span class="h-menu-show-desc">公共月报类型</span>
+          </div>
+        </router-link>
+        <router-link exact to="/UserManage" tag="li" class="h-menu-li" v-show="$store.state.storeuType === 'admin'">
+          <div content="账号管理" placement="right" class="h-menu-show">
+            <span class="h-menu-show-icon">
+              <i class="h-icon-users"></i>
+            </span>
+            <span class="h-menu-show-desc">账号管理</span>
+          </div>
+        </router-link>
         <router-link exact to="/ChangePwd" tag="li" class="h-menu-li">
           <div content="修改密码" placement="right" class="h-menu-show">
             <span class="h-menu-show-icon">
               <i class="h-icon-lock"></i>
             </span>
             <span class="h-menu-show-desc">修改密码</span>
-          </div>
-        </router-link>
-        <router-link exact to="/UserManage" tag="li" class="h-menu-li" v-show="$store.state.storeuType === 'admin'">
-          <div content="员工管理" placement="right" class="h-menu-show">
-            <span class="h-menu-show-icon">
-              <i class="h-icon-users"></i>
-            </span>
-            <span class="h-menu-show-desc">账号管理</span>
           </div>
         </router-link>
       </ul>
@@ -69,7 +85,9 @@
         </span>
       </div>
       <div class="toDoBox" :style="{'minHeight':boxHeight}">
-        <router-view />
+        <transition name="fade" mode="out-in">
+          <router-view />
+        </transition>
       </div>
     </Content>
     <!-- 页脚 -->
@@ -130,19 +148,31 @@ export default {
   line-height: 54px;
   font-size: 16px;
 }
+.mark_hover:hover{
+  background #fde5a6
+}
 .bold
   font-weight bold
+.mark
+  background #ffe6e6 !important
 
+.mark_name
+  background #fff2cf
 .logout {
   width: 100px;
   text-align: right;
   line-height: 54px;
   font-size: 16px;
 }
-
+tr:hover{
+  background #f1f1f1
+}
 .logout:hover {
   cursor: pointer;
   color: #FFF;
+}
+.h-btn-s{
+  background none !important
 }
 
 .h-menu {
@@ -220,6 +250,9 @@ export default {
 .ml10 {
   margin-left: 10px;
 }
+.h-date-footer .h-btn.h-btn-primary{
+  color: #000 !important;
+}
 
 .layout {
   background: #f0f2f5;
@@ -240,7 +273,7 @@ export default {
   .h-layout-footer {
     padding: 24px 50px;
     color: rgba(0, 0, 0, 0.65);
-    font-size: 14px;
+    font-size: 12px;
   }
 }
 
@@ -249,8 +282,21 @@ export default {
   bottom 0
   z-index 120
   padding 6px !important;
-  width: 80%;
-  margin-left 10%;
-  background rgba(255,255,255,.75);
+  width: 100%;
+  margin-left 0%;
+  background #f0f2f5;
 }
+
+.fade-enter
+  margin-top -10px
+  opacity 0
+.fade-leave
+  margin-top 0
+  opacity 1
+.fade-enter-active
+  transition-duration .4s
+.fade-leave-active
+  opacity 0
+  margin-top -10px
+  transition-duration .2s
 </style>

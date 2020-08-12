@@ -5,7 +5,7 @@
       <Button class="ml10" @click="addUser()" color="primary" :disabled="newUser==''">添加</Button>
     </div>
     <table class="table mt20">
-      <tr class="table_th">
+      <tr class="table_th bg_yellow">
         <td class="tagc">ID</td>
         <td class="tagc">用户名</td>
         <td class="tagc">重置密码</td>
@@ -18,11 +18,12 @@
           <button
             type="button"
             class="h-btn h-btn-text-blue h-btn-s h-btn-no-border"
+            @click="editShow = true;setUName = item.u_name;setUID = item.u_id"
           >
             <i v-show="item.u_id > 999" class="h-icon-edit"></i>
           </button>
         </td>
-        <td class="tagc">
+        <td class="tagc yellow">
           <span v-show="item.u_id < 1000">—</span>
           <button
             v-show="item.u_id > 999"
@@ -47,12 +48,28 @@
       </tr>
     </table>
 
+    <!-- 修改用户名 model -->
+    <Modal v-model="editShow">
+      <div slot="header" class="blue bold">修改用户名 {{ setUID }} — {{ setUName }} 为：</div>
+      <div class="mt10">
+        <input type="text" v-model="editNewName" placeholder="新的用户名">
+      </div>
+      <div slot="footer">
+        <Button class="h-btn h-btn-text-blue" @click="updateUser()">
+          <i class="h-icon-edit"></i> 修 改
+        </Button>
+        <button class="h-btn" @click="editShow = false">
+          <i class="h-icon-close"></i> 取 消
+        </button>
+      </div>
+    </Modal>
+
     <!-- 重置密码 model -->
     <Modal v-model="rePwdShow">
       <div slot="header" class="red bold">重置密码</div>
       <div style="width: 400px;">是否要重置：<span class="green bold">{{ setUID }} — {{ setUName }}</span> 的密码？</div>
       <div slot="footer">
-        <Button class="h-btn h-btn-text-red" @click="delList()">
+        <Button class="h-btn h-btn-text-red" @click="resetPwd()">
           <i class="h-icon-refresh"></i> 重 置
         </Button>
         <button class="h-btn" @click="rePwdShow = false">
@@ -64,9 +81,11 @@
     <!-- 删除账户 model -->
     <Modal v-model="delShow">
       <div slot="header" class="red bold">删除账号</div>
-      <div style="width: 400px;">是否要删除：<span class="green bold">{{ setUID }} — {{ setUName }}</span> ?</div>
+      <h3 style="width: 400px;">是否要删除：<span class="green bold">{{ setUID }} — {{ setUName }}</span> ?
+      </h3>
+      <div class="red bold">注意：删除该员工，则相关的月报类型一并删除，任务列表记录不做删除。</div>
       <div slot="footer">
-        <Button class="h-btn h-btn-red" @click="delList()">
+        <Button class="h-btn h-btn-red" @click="delUser()">
           <i class="h-icon-trash"></i> 删 除
         </Button>
         <button class="h-btn" @click="delShow = false">
@@ -89,8 +108,10 @@ export default {
       allUsers: [],
       setUID: '',
       setUName: '',
+      editNewName: '',
       rePwdShow: false,
-      delShow: false
+      delShow: false,
+      editShow: false,
     }
   },
   mounted(){
@@ -98,9 +119,74 @@ export default {
     _this.getUsers();
   },
   methods: {
+    // 修改用户名
+    updateUser(){
+      let _this = this;
+      let qsData = qs.stringify({
+        updateUser: _this.setUID,
+        newName: _this.editNewName
+      });
+       _this.$axios
+        .post("/api/user.php", qsData)
+        .then(function(res) {
+          if(res.data == 'ok'){
+            _this.getUsers();
+            _this.$Notice["success"](`修改完成。`);
+            _this.editShow = false;
+          }else{
+            _this.$Notice["error"](`添加失败。`);
+            console.log(res.data)
+          }
+        })
+        .catch(function(error) {
+          console.log(error);
+        });
+    },
+    // 重置密码
+    resetPwd(){
+      let _this = this;
+      let qsData = qs.stringify({
+        resetPwd: _this.setUID,
+      });
+
+      _this.$axios
+        .post("/api/user.php", qsData)
+        .then(function(res) {
+          if(res.data == 'ok'){
+            _this.getUsers();
+            _this.$Notice["success"](`重置完成。`);
+            _this.rePwdShow = false;
+          }else{
+            _this.$Notice["error"](`添加失败。`);
+            console.log(res.data)
+          }
+        })
+        .catch(function(error) {
+          console.log(error);
+        });
+    },
     // 删除员工
-    rePwd(id){
-      alert(id)
+    delUser(){
+      let _this = this;
+      let qsData = qs.stringify({
+        delUser: _this.setUID,
+      });
+
+      _this.$axios
+        .post("/api/user.php", qsData)
+        .then(function(res) {
+          if(res.data == 'ok'){
+            _this.getUsers();
+            _this.$Notice["success"](`删除完成。`);
+            _this.delShow = false;
+          }else{
+            _this.$Notice["error"](`添加失败。`);
+            console.log(res.data)
+          }
+        })
+        .catch(function(error) {
+          console.log(error);
+        });
     },
     // 查询员工
     getUsers(){
@@ -163,5 +249,8 @@ export default {
   font-weight: bolder;
   background: #348a5b;
   color: #fff;
+}
+.bg_yellow{
+  background #ad6d36;
 }
 </style>

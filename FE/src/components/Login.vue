@@ -1,6 +1,6 @@
 <template>
   <div v-width="360" class="auto">
-    <div class="h-panel mt40">
+    <div class="h-panel" style="margin-top:100px;">
       <div class="h-panel-bar">
         <span class="h-panel-title">登录</span>
         <!-- <span class="h-panel-right"><a>找回密码</a></span> -->
@@ -16,7 +16,7 @@
         </div>
         <Button
           class="mt20 loginBtn"
-          color="blue"
+          color="primary"
           :disabled="u_id == '' || u_pwd == ''"
           @click="login()"
         >登 录</Button>
@@ -75,5 +75,12 @@ export default {
 .loginBtn {
   margin-left: 12%;
   width: 76%;
+}
+.h-panel-bar{
+  background: #35a772
+  border-top-left-radius: 4px;
+  border-top-right-radius: 4px;
+  color: #FFF;
+  font-weight: bold;
 }
 </style>

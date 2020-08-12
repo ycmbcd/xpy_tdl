@@ -16,6 +16,7 @@ if(isset($_POST['del_tdl'])){
 // 添加一个任务
 if(isset($_POST['add_tdl'])){
   $u_id = $_SESSION['u_id'];
+  $u_name = $_SESSION['u_name'];
   $t_week = addslashes($_POST['addWeek']);
   $t_date = addslashes($_POST['addDate']);
   $t_work = addslashes($_POST['addWork']);
@@ -28,6 +29,7 @@ if(isset($_POST['add_tdl'])){
     
   $sql = "INSERT INTO tdl_list (
     u_id,
+    u_name,
     t_week,
     t_date,
     t_work,
@@ -39,6 +41,7 @@ if(isset($_POST['add_tdl'])){
     t_do
   ) VALUES (
     '{$u_id}',
+    '{$u_name}',
     '{$t_week}',
     '{$t_date}',
     '{$t_work}',
@@ -68,11 +71,46 @@ if(isset($_POST['get_tdl'])){
   }else{
     $u_id = $_SESSION['u_id'];
     // 查询数据
-  $sql = "SELECT * FROM tdl_list WHERE u_id = '{$u_id}' AND t_date BETWEEN '{$startDate}' AND '{$endDate}' ORDER BY t_date DESC LIMIT {$start}, {$end}";
+  $sql = "SELECT * FROM tdl_list WHERE u_id = '{$u_id}' AND t_date BETWEEN '{$startDate}' AND '{$endDate}' ORDER BY t_date LIMIT {$start}, {$end}";
     $res = $db->getAll($sql);
+    foreach ($res as $key => $value) {
+      $res[$key]['mark'] = false;
+    }
     $final_res['list'] = $res;
     // 查询个数
-    $sql2 = "SELECT count(1) as cc FROM tdl_list WHERE u_id = '{$u_id}' AND t_date BETWEEN '{$startDate}' AND '{$endDate}' ORDER BY id DESC";
+    $sql2 = "SELECT count(1) as cc FROM tdl_list WHERE u_id = '{$u_id}' AND t_date BETWEEN '{$startDate}' AND '{$endDate}'";
+    $res2 = $db->getOne($sql2);
+    $final_res['count'] = $res2['cc'];
+    $final_res['start'] = $start;
+    $final_res['end'] = $end;
+    echo json_encode($final_res);
+  }
+}
+
+// 查询所有任务
+if(isset($_POST['get_all_tdl'])){
+  // 日期限制
+  $startDate = addslashes($_POST['startDate']);
+  $endDate = addslashes($_POST['endDate']);
+  // 分页限制
+  $nowPage = addslashes($_POST['nowPage']);
+  $nowSize = addslashes($_POST['nowSize']);
+  $start = ($nowPage-1) * $nowSize;
+  $end = $nowSize;
+  // 如果日期不完全，返回空
+  if($startDate == '' or $endDate == ''){
+    echo '';
+  }else{
+    $u_id = $_SESSION['u_id'];
+    // 查询数据
+  $sql = "SELECT * FROM tdl_list WHERE t_date BETWEEN '{$startDate}' AND '{$endDate}' ORDER BY u_name,t_date LIMIT {$start}, {$end}";
+    $res = $db->getAll($sql);
+    foreach ($res as $key => $value) {
+      $res[$key]['mark'] = false;
+    }
+    $final_res['list'] = $res;
+    // 查询个数
+    $sql2 = "SELECT count(1) as cc FROM tdl_list WHERE t_date BETWEEN '{$startDate}' AND '{$endDate}'";
     $res2 = $db->getOne($sql2);
     $final_res['count'] = $res2['cc'];
     $final_res['start'] = $start;

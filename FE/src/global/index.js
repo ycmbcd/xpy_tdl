@@ -30,7 +30,6 @@ export default {
           },
         })
         .then((res) => {
-          console.log(res);
           if (res.data.status === "ing") {
             _this.$store.commit("storeuName", res.data.u_name);
             _this.$store.commit("storeuID", res.data.u_id);

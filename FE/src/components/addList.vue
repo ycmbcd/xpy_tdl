@@ -95,7 +95,6 @@ export default {
       _this.$axios
         .post("/api/type.php", qsData)
         .then(function(res) {
-          console.log(res);
           res.data.forEach(item => {
             _this.allType.push({'id':item.id,'name':item.m_type})
           });

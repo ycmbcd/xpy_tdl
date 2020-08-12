@@ -5,7 +5,7 @@ require_once("./access.php");
 require_once("./pdo/PdoMySQL.class.php");
 $db = new PdoMySQL();
 
-// 下载周报
+// 下载统计周报表
 if(isset($_POST['down_week'])){
   // 日期限制
   $startDate = addslashes($_POST['startDate']);
@@ -19,7 +19,7 @@ if(isset($_POST['down_week'])){
     //PHPExcel
     $objPHPExcel = new PHPExcel();
     $objSheet = $objPHPExcel->getActiveSheet();
-    $objSheet->setTitle($_SESSION['u_name'].'周报→'.$startDate.'~'.$endDate);//表名
+    $objSheet->setTitle('统计周报表→'.$startDate.'~'.$endDate);//表名
     
     $objSheet->getDefaultStyle()->getFont()->setName("微软雅黑")->setSize(11);  //默认字体
     // 标题设置
@@ -28,8 +28,8 @@ if(isset($_POST['down_week'])){
     $objPHPExcel->getActiveSheet()->mergeCells('B2:H2');// 合并单元格
     $objSheet->getStyle('D2')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);//居中对齐
     // $objPHPExcel->getActiveSheet()->getStyle('A1:H1')->getFont()->getColor()->setARGB(PHPExcel_Style_Color::COLOR_WHITE);//前景色
-    $objSheet->getStyle('B2:H2')->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID);
-    $objSheet->getStyle('B2:H2')->getFill()->getStartColor()->setRGB('dce6f1'); //背景色
+    $objSheet->getStyle('A2:H2')->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID);
+    $objSheet->getStyle('A2:H2')->getFill()->getStartColor()->setRGB('dce6f1'); //背景色
     // 特定单元格宽高
     $objSheet->getColumnDimension('C')->setWidth(12);//单元格宽
     $objSheet->getColumnDimension('D')->setWidth(40);//单元格宽
@@ -48,6 +48,7 @@ if(isset($_POST['down_week'])){
     $objSheet->getRowDimension('9')->setRowHeight(20);//单元格高
     $objSheet->getRowDimension('10')->setRowHeight(20);//单元格高
     // 值设置
+    $objPHPExcel->getActiveSheet()->getStyle('A')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);//居中对齐
     $objPHPExcel->getActiveSheet()->getStyle('B')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);//居中对齐
     $objPHPExcel->getActiveSheet()->getStyle('B2')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);//居中对齐
     $objPHPExcel->getActiveSheet()->getStyle('D3')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);//居中对齐
@@ -65,18 +66,19 @@ if(isset($_POST['down_week'])){
     // $objPHPExcel->getActiveSheet()->getStyle('B2:H10')->applyFromArray($styleThinBlackBorderOutline);
     
     $objSheet
-      ->setCellValue("B2", "工作日志")
-      ->setCellValue("B3", "星 期")
-      ->setCellValue("C3", "日 期")
-      ->setCellValue("D3", "工作内容")
-      ->setCellValue("E3", "完成成果")
-      ->setCellValue("F3", "工时（小时）")
-      ->setCellValue("G3", "存在问题")
-      ->setCellValue("H3", "拟采取措施");    //表头值
+        ->setCellValue("B2", "工作日志")
+        ->setCellValue("A3", "职 员")
+        ->setCellValue("B3", "星 期")
+        ->setCellValue("C3", "日 期")
+        ->setCellValue("D3", "工作内容")
+        ->setCellValue("E3", "完成成果")
+        ->setCellValue("F3", "工时（小时）")
+        ->setCellValue("G3", "存在问题")
+        ->setCellValue("H3", "拟采取措施");    //表头值
 
     $u_id = $_SESSION['u_id'];
     // 查询数据
-    $sql = "SELECT * FROM tdl_list WHERE u_id = '{$u_id}' AND t_date BETWEEN '{$startDate}' AND '{$endDate}' ORDER BY t_date";
+    $sql = "SELECT * FROM tdl_list WHERE t_date BETWEEN '{$startDate}' AND '{$endDate}' ORDER BY u_name,t_date";
     $res = $db->getAll($sql);
 
     $j=4;
@@ -91,21 +93,23 @@ if(isset($_POST['down_week'])){
         $now_date = $value['t_date'];
       }
 
-        $objSheet->setCellValue("B".$j,str_replace('星期','', $value['t_week']))
-                ->setCellValue("C".$j,str_replace('-', '/', $value['t_date']))
-                ->setCellValueExplicit("D".$j,$value['t_work'],PHPExcel_Cell_DataType::TYPE_STRING)
-                ->setCellValue("E".$j,$value['t_value'])
-                ->setCellValue("F".$j,$value['t_time'] + $value['t_time_other'])
-                ->setCellValueExplicit("G".$j,$value['t_ask'],PHPExcel_Cell_DataType::TYPE_STRING)
-                ->setCellValueExplicit("H".$j,$value['t_do'],PHPExcel_Cell_DataType::TYPE_STRING);
+        $objSheet
+            ->setCellValue("A".$j,$value['u_name'])        
+            ->setCellValue("B".$j,str_replace('星期','', $value['t_week']))
+            ->setCellValue("C".$j,str_replace('-', '/', $value['t_date']))
+            ->setCellValueExplicit("D".$j,$value['t_work'],PHPExcel_Cell_DataType::TYPE_STRING)
+            ->setCellValue("E".$j,$value['t_value'])
+            ->setCellValue("F".$j,$value['t_time'] + $value['t_time_other'])
+            ->setCellValueExplicit("G".$j,$value['t_ask'],PHPExcel_Cell_DataType::TYPE_STRING)
+            ->setCellValueExplicit("H".$j,$value['t_do'],PHPExcel_Cell_DataType::TYPE_STRING);
         $j++;
     }
 
     $end_line = $j - 1;
     // 应用边框
-    $objPHPExcel->getActiveSheet()->getStyle('B2:H'.$end_line)->applyFromArray($styleThinBlackBorderOutline);
+    $objPHPExcel->getActiveSheet()->getStyle('A2:H'.$end_line)->applyFromArray($styleThinBlackBorderOutline);
 
-    $table_name = 'week_table_'.$u_id.'_'.time().'.xlsx';
+    $table_name = 'week_all_table_'.$u_id.'_'.time().'.xlsx';
     // $objPHPExcel->getActiveSheet()->getColumnDimension()->setAutoSize(true);
     $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
     $objWriter->save("../down/".$table_name);   //保存在服务器

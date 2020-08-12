@@ -24,3 +24,35 @@ if(isset($_POST['addUser'])){
 		$res = $db->execute($sql);
 		echo 'ok';
 }
+
+// 删除员工
+if(isset($_POST['delUser'])){
+   $del_user = $_POST['delUser'];
+  // 删除员工
+  $sql = "DELETE FROM tdl_user WHERE u_id = '{$del_user}'";
+  $res = $db->execute($sql);
+  // 删除员工对应的月报类型
+  $sql = "DELETE FROM tdl_type WHERE u_id = '{$del_user}'";
+  $res = $db->execute($sql);
+  
+  echo 'ok';
+}
+
+// 重置密码
+if(isset($_POST['resetPwd'])){
+  $u_id = $_POST['resetPwd'];
+  $sql = "UPDATE tdl_user SET u_pwd = 'Just.1t' WHERE u_id = '{$u_id}'";
+  $res = $db->execute($sql);
+  
+  echo 'ok';
+}
+
+// 修改用户名
+if(isset($_POST['updateUser'])){
+  $u_id = $_POST['updateUser'];
+  $u_name = $_POST['newName'];
+  $sql = "UPDATE tdl_user SET u_name = '{$u_name}' WHERE u_id = '{$u_id}'";
+  $res = $db->execute($sql);
+  
+  echo 'ok';
+}
