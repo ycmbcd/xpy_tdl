@@ -37,7 +37,15 @@ insert into tdl_user values('1', '100', 'ycmbcd', '123456', 'admin');
 create table tdl_type(
     id int(9) auto_increment primary key,
     u_id int(9),        # 归属id
-    m_type varchar(10)  # 月报类型
+    m_type varchar(200)  # 月报类型
+)engine=InnoDB default charset='utf8mb4';
+```
+
+> 创建部门表
+```sql
+create table tdl_group(
+    id int(9) auto_increment primary key,
+    m_group varchar(200)  # 月报类型
 )engine=InnoDB default charset='utf8mb4';
 ```
 

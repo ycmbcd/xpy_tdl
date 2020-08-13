@@ -41,9 +41,17 @@
         <router-link exact to="/UserManage" tag="li" class="h-menu-li" v-show="$store.state.storeuType === 'admin'">
           <div content="账号管理" placement="right" class="h-menu-show">
             <span class="h-menu-show-icon">
-              <i class="h-icon-users"></i>
+              <i class="h-icon-user"></i>
             </span>
             <span class="h-menu-show-desc">账号管理</span>
+          </div>
+        </router-link>
+        <router-link exact to="/setGroup" tag="li" class="h-menu-li" v-show="$store.state.storeuType === 'admin'">
+          <div content="部门管理" placement="right" class="h-menu-show">
+            <span class="h-menu-show-icon">
+              <i class="h-icon-users"></i>
+            </span>
+            <span class="h-menu-show-desc">部门管理</span>
           </div>
         </router-link>
         <router-link exact to="/ChangePwd" tag="li" class="h-menu-li">

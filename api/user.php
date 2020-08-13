@@ -16,11 +16,12 @@ if(isset($_POST['getUsers'])){
 // 添加员工
 if(isset($_POST['addUser'])){
     $add_user = $_POST['addUser'];
+    $new_group = $_POST['newGroup'];
 		//获取最大工号
     $sql = "SELECT Max(u_id) as max_num FROM tdl_user";
     $res = $db->getOne($sql);
     $new_num = $res['max_num']+1;
-		$sql = "INSERT INTO tdl_user (u_id,u_name,u_pwd,u_type) VALUES ('{$new_num}','{$add_user}','Just.1t','-')";
+		$sql = "INSERT INTO tdl_user (u_id,u_name,u_pwd,u_type,u_group) VALUES ('{$new_num}','{$add_user}','Just.1t','-','{$new_group}')";
 		$res = $db->execute($sql);
 		echo 'ok';
 }
@@ -47,11 +48,12 @@ if(isset($_POST['resetPwd'])){
   echo 'ok';
 }
 
-// 修改用户名
+// 修改用户
 if(isset($_POST['updateUser'])){
   $u_id = $_POST['updateUser'];
   $u_name = $_POST['newName'];
-  $sql = "UPDATE tdl_user SET u_name = '{$u_name}' WHERE u_id = '{$u_id}'";
+  $u_group = $_POST['newGroup'];
+  $sql = "UPDATE tdl_user SET u_name = '{$u_name}',u_group = '{$u_group}' WHERE u_id = '{$u_id}'";
   $res = $db->execute($sql);
   
   echo 'ok';

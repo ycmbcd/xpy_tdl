@@ -4,6 +4,7 @@ import Login from '../components/Login.vue'
 import ToDoList from '../components/ToDoList.vue'
 import ChangePwd from '../components/ChangePwd.vue'
 import setCommonType from '../components/setCommonType.vue'
+import setGroup from '../components/setGroup.vue'
 import NoPage from '../components/NoPage.vue'
 import TableExcel from '../components/TableExcel.vue'
 import UserManage from '../components/UserManage.vue'
@@ -39,7 +40,7 @@ const router = new Router({
       path: '/UserManage',
       name: 'UserManage',
       component: UserManage,
-      meta: { title: '账号管理', icon: 'h-icon-users' }
+      meta: { title: '账号管理', icon: 'h-icon-user' }
     },
     {
       path: '/TableExcel',
@@ -52,6 +53,12 @@ const router = new Router({
       name: 'setCommonType',
       component: setCommonType,
       meta: { title: '公共月报类型', icon: 'h-icon-message' }
+    },
+    {
+      path: '/setGroup',
+      name: 'setGroup',
+      component: setGroup,
+      meta: { title: '部门管理', icon: 'h-icon-users' }
     },
     {
       path: '/ChangePwd',
