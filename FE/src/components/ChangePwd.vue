@@ -20,7 +20,7 @@
         <Button
           class="mt20 resetBtn"
           color="red"
-          :disabled="o_pwd == '' || new_pwd == '' || re_pwd == ''"
+          :disabled="o_pwd == '' || new_pwd == '' || re_pwd == '' || new_pwd !== re_pwd"
           @click="rePwd()"
         >确认修改</Button>
       </div>
@@ -59,6 +59,9 @@ export default {
             _this.$Notice["success"](`修改完成，请重新登录。`);
             _this.$store.commit("pingStatus", "Ready");
             _this.$router.push("/");
+          }else{
+            _this.$Notice["error"](`系统错误，请联系管理员！`);
+            console.log(res.data);
           }
         })
         .catch(function(error) {

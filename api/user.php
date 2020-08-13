@@ -42,7 +42,9 @@ if(isset($_POST['delUser'])){
 // 重置密码
 if(isset($_POST['resetPwd'])){
   $u_id = $_POST['resetPwd'];
-  $sql = "UPDATE tdl_user SET u_pwd = 'Just.1t' WHERE u_id = '{$u_id}'";
+  $salt = 'Just.1ttse4$dA*65';
+  $u_pwd = md5($salt);
+  $sql = "UPDATE tdl_user SET u_pwd = '{$u_pwd}' WHERE u_id = '{$u_id}'";
   $res = $db->execute($sql);
   
   echo 'ok';

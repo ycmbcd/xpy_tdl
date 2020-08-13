@@ -8,7 +8,7 @@ $db = new PdoMySQL();
 // 查询月报类型
 if(isset($_POST['getType'])){
     $u_id = $_SESSION['u_id'];
-    $sql = "SELECT * FROM tdl_type WHERE u_id in ('{$u_id}', 0) ORDER BY id DESC";
+    $sql = "SELECT * FROM tdl_type WHERE u_id in ('{$u_id}', 0) ORDER BY u_id,id DESC";
     $res = $db->getAll($sql);
     echo json_encode($res);
 }

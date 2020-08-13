@@ -136,7 +136,6 @@ export default {
       _this.$axios
         .post("/api/group.php", qsData)
         .then(function(res) {
-          console.log(res.data);
           _this.allGroup = res.data
         })
         .catch(function(error) {

@@ -8,7 +8,7 @@ $db = new PdoMySQL();
 // 登录
 if(isset($_POST['login'])){
     $u_id = addslashes($_POST['u_id']);
-    $u_pwd = addslashes($_POST['u_pwd']);
+    $u_pwd = md5(addslashes($_POST['u_pwd']).'tse4$dA*65');
     $sql = "SELECT u_pwd,u_name,u_type FROM tdl_user WHERE u_id = '{$u_id}'";
     $res = $db->getOne($sql);
     if(empty($res)){
@@ -49,7 +49,7 @@ if(isset($_GET['logout'])){
 
 // 修改密码
 if(isset($_GET['change_pwd'])){
-    $o_pwd = addslashes($_GET['o_pwd']);
+    $o_pwd = md5(addslashes($_GET['o_pwd']).'tse4$dA*65');
     $new_pwd = addslashes($_GET['new_pwd']);
     $u_id = $_SESSION['u_id'];
     // 查询原始密码是否正确
@@ -57,6 +57,7 @@ if(isset($_GET['change_pwd'])){
     $res = $db->getOne($sql);
     $pwd = $res['u_pwd'];
     if($o_pwd == $pwd){
+        $new_pwd = md5($new_pwd.'tse4$dA*65');
         $sql = "UPDATE tdl_user SET u_pwd = '{$new_pwd}' WHERE u_id = '{$u_id}'";
         $res = $db->execute($sql);
         session_destroy();
