@@ -21,7 +21,8 @@ if(isset($_POST['addUser'])){
     $sql = "SELECT Max(u_id) as max_num FROM tdl_user";
     $res = $db->getOne($sql);
     $new_num = $res['max_num']+1;
-		$sql = "INSERT INTO tdl_user (u_id,u_name,u_pwd,u_type,u_group) VALUES ('{$new_num}','{$add_user}','Just.1t','-','{$new_group}')";
+    $salt = md5('Just.1ttse4$dA*65');
+		$sql = "INSERT INTO tdl_user (u_id,u_name,u_pwd,u_type,u_group) VALUES ('{$new_num}','{$add_user}','{$salt}','-','{$new_group}')";
 		$res = $db->execute($sql);
 		echo 'ok';
 }
