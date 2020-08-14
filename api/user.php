@@ -8,7 +8,7 @@ $db = new PdoMySQL();
 // 查询员工
 if(isset($_POST['getUsers'])){
 		//获取最大工号
-    $sql = "SELECT * FROM tdl_user ORDER BY id DESC";
+    $sql = "SELECT * FROM tdl_user WHERE u_id > 999 ORDER BY u_id DESC";
     $res = $db->getAll($sql);
     echo json_encode($res);
 }
