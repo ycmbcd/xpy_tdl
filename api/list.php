@@ -5,6 +5,15 @@ require_once("./access.php");
 require_once("./pdo/PdoMySQL.class.php");
 $db = new PdoMySQL();
 
+// 获取剩余工时
+if(isset($_POST['getHasTime'])){
+  $date = $_POST['getHasTime'];
+  $u_id = $_SESSION['u_id'];
+  $sql = "SELECT sum(t_time) as sum_time FROM tdl_list WHERE u_id = '{$u_id}' AND t_date = '{$date}'";
+  $res = $db->getOne($sql);
+  echo $res['sum_time'];
+}
+
 // 删除一个任务
 if(isset($_POST['del_tdl'])){
   $id = $_POST['del_tdl'];

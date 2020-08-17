@@ -1,5 +1,5 @@
 <template>
-  <button class="h-btn" @click="resetAdd();addModal = true">
+  <button class="h-btn" @click="resetAdd();getHasTime();addModal = true">
     <span><v-icon name="plus"/> 新增一条</span>
     <Modal v-model="addModal">
       <div slot="header">新增一条</div>
@@ -9,8 +9,7 @@
           <DatePicker readonly v-model="addDate" :format="'YYYY-MM-DD 星期w'"></DatePicker>
         </div>
         <div class="h-input-group mt10 auto" v-width="280">
-          <span class="h-input-addon">工作内容</span>
-          <input type="text" v-model="addWork" />
+          <textarea v-model="addWork" placeholder="工作内容"  v-width="280" size="s"></textarea>
         </div>
         <div class="h-input-group mt10 auto" v-width="280">
           <span class="h-input-addon">月报类型</span>
@@ -38,7 +37,7 @@
         </div>
       </div>
       <div slot="footer">
-        <Button class="h-btn" :disabled="addWork=='' || addType=='' || !addType || !addDate || addTime == ''" @click="addList()" color="primary"><v-icon name="plus"/> 添加</Button>
+        <Button class="h-btn" :disabled="addWork=='' || addType=='' || !addType || !addDate" @click="addList()" color="primary"><v-icon name="plus"/> 添加</Button>
         <button class="h-btn" @click="addModal=false"><v-icon name="ban"/> 取消</button>
       </div>
     </Modal>
@@ -58,21 +57,56 @@ export default {
       addWork: "",
       addValue: 100,
       addType: "",
-      addTime: 7.5,
+      addTime: 0,
       addTimeOther: 0,
       addAsk: "无",
       addDo: "",
-      allType:[]
+      allType:[],
+      hasTime: 0,
     };
   },
+  watch: {
+    addDate(val){
+      var _this = this;
+      _this.getHasTime();
+    },
+    addTime(val){
+      var _this = this;
+      if(val > _this.hasTime){
+        _this.addTime = _this.hasTime;
+      }
+      if(val < 0){
+        _this.addTime = _this.hasTime;
+      }
+    }
+  },
   methods:{
+    // 获取剩余工作时长
+    getHasTime(){
+      let _this = this;
+      let arr = _this.addDate.split(' ');
+      let addDate = arr[0];
+      let qsData = qs.stringify({
+        getHasTime: addDate,
+      });
+
+      _this.$axios
+        .post("/api/list.php", qsData)
+        .then(function(res) {
+          _this.addTime = 7.5 - res.data;
+          _this.hasTime = 7.5 - res.data;
+        })
+        .catch(function(error) {
+          console.log(error);
+        });
+    },
     // 重置数据
     resetAdd(){
       let _this = this;
       _this.addWork = "";
       _this.addValue = 100;
       _this.addType = "";
-      _this.addTime = 7.5;
+      _this.addTime = 0;
       _this.addTimeOther = 0;
       _this.addAsk = "无";
       _this.addDo = "";
@@ -164,6 +198,7 @@ export default {
   mounted () {
     this.setToday();
     this.getType();
+    this.getHasTime();
   },
 };
 </script>
