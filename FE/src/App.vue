@@ -140,6 +140,9 @@ export default {
 </script>
 
 <style lang="stylus">
+.h-menu-show{
+  padding: 15px 16px!important;
+}
 .h-menu-dark,.h-layout-header-theme-dark{
   background #444 !important
 }
@@ -147,6 +150,7 @@ export default {
   height 54px
 }
 .layout .layout-logo{
+  width: 130px !important;
   line-height 23px
 }
 .h-notify .h-notify-mask{

@@ -70,6 +70,10 @@ export default {
   mounted: function () {
     let _this = this;
     _this.$logout();
+    setTimeout(function(){
+      _this.$ping();
+      _this.$store.commit("pingStatus", "Ready");
+    }, 100)
   },
 };
 </script>
