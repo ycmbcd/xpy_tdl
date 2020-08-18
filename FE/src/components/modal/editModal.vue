@@ -9,8 +9,7 @@
           <DatePicker readonly v-model="editDate" :format="'YYYY-MM-DD 星期w'"></DatePicker>
         </div>
         <div class="h-input-group mt10 auto" v-width="280">
-          <span class="h-input-addon">工作内容</span>
-          <input type="text" v-model="editWork" />
+          <textarea v-model="editWork" placeholder="工作内容"  v-width="280" size="s"></textarea>
         </div>
         <div class="h-input-group mt10 auto" v-width="280">
           <span class="h-input-addon">月报类型</span>
@@ -38,7 +37,7 @@
         </div>
       </div>
       <div slot="footer">
-        <Button :disabled="editWork=='' || editType=='' || !editType || !editDate || editTime == ''" class="h-btn h-btn-text-blue" @click="updateEdit()">
+        <Button :disabled="editWork=='' || editType=='' || !editType || !editDate" class="h-btn h-btn-text-blue" @click="updateEdit()">
           <i class="h-icon-edit"></i> 修 改
         </Button>
         <button class="h-btn" @click="closeModal()">
@@ -64,13 +63,49 @@ export default {
       editTimeOther: 0,
       editAsk: "",
       editDo: "",
-      allType:[]
+      allType:[],
+      hasTime: 0,
+    }
+  },
+  watch: {
+    editDate(val){
+      var _this = this;
+      _this.getHasTime();
+    },
+    editTime(val){
+      var _this = this;
+      if(val > _this.hasTime){
+        _this.editTime = _this.hasTime;
+      }
+      if(val < 0){
+        _this.editTime = _this.hasTime;
+      }
     }
   },
   mounted() {
     this.getType();
+    this.getHasTime();
   },
   methods:{
+    // 获取剩余工作时长
+    getHasTime(){
+      let _this = this;
+      let arr = _this.editDate.split(' ');
+      let editDate = arr[0];
+      let qsData = qs.stringify({
+        getHasTime: editDate,
+      });
+
+      _this.$axios
+        .post("/api/list.php", qsData)
+        .then(function(res) {
+          _this.editTime = 7.5 - res.data;
+          _this.hasTime = 7.5 - res.data;
+        })
+        .catch(function(error) {
+          console.log(error);
+        });
+    },
     // 关闭 Modal
     closeModal(){
       let _this = this;
