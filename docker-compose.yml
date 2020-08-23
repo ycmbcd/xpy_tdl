@@ -6,12 +6,13 @@ services:
     - 888:80
     volumes:
     - ./FE/dist:/usr/share/nginx/html
-    - ./down:/usr/share/nginx/html/down
     - ./docker/conf/nginx.conf:/etc/nginx/nginx.conf
+    - ./down:/usr/share/nginx/html/down
   php:
     image: bitnami/php-fpm:5.6-ol-7-prod
     volumes:
     - ./api:/var/www/html/api
+    - ./down:/var/www/html/down
   mysql:
     image: mysql:5.6
     ports:
