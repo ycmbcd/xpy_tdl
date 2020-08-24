@@ -69,8 +69,6 @@ export default {
   },
   watch: {
     editDate(val){
-      var _this = this;
-      _this.getHasTime();
     },
     editTime(val){
       var _this = this;
@@ -84,7 +82,6 @@ export default {
   },
   mounted() {
     this.getType();
-    this.getHasTime();
   },
   methods:{
     // 获取剩余工作时长
@@ -99,8 +96,7 @@ export default {
       _this.$axios
         .post("/api/list.php", qsData)
         .then(function(res) {
-          _this.editTime = 7.5 - res.data;
-          _this.hasTime = 7.5 - res.data;
+          _this.hasTime = 7.5 - res.data + Number(_this.editTime);
         })
         .catch(function(error) {
           console.log(error);
@@ -147,6 +143,7 @@ export default {
     // 获取要修改的数据
     getEdit(id){
       let _this = this;
+      _this.getHasTime();
       _this.getType();
       let qsData = qs.stringify({
         get_edit: id,
@@ -165,6 +162,7 @@ export default {
           _this.editTimeOther = res.data.t_time_other;
           _this.editAsk = res.data.t_ask;
           _this.editDo = res.data.t_do;
+          _this.getHasTime();
         })
         .catch(function (error) {
           console.log(error);
