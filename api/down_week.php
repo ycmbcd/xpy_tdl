@@ -94,7 +94,7 @@ if(isset($_POST['down_week'])){
         $objSheet->setCellValue("B".$j,str_replace('星期','', $value['t_week']))
                 ->setCellValue("C".$j,str_replace('-', '/', $value['t_date']))
                 ->setCellValueExplicit("D".$j,$value['t_work'],PHPExcel_Cell_DataType::TYPE_STRING)
-                ->setCellValue("E".$j,$value['t_value'])
+                ->setCellValue("E".$j,$value['t_value'].'%')
                 ->setCellValue("F".$j,$value['t_time'] + $value['t_time_other'])
                 ->setCellValueExplicit("G".$j,$value['t_ask'],PHPExcel_Cell_DataType::TYPE_STRING)
                 ->setCellValueExplicit("H".$j,$value['t_do'],PHPExcel_Cell_DataType::TYPE_STRING);

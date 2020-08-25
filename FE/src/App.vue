@@ -100,7 +100,7 @@
     </Content>
     <!-- 页脚 -->
     <HFooter class="tdl_footer text-center">
-      Copyright &copy; {{year}}
+      本系统运行于 <a href="http://192.168.1.123:666" class="red" target="_blank">Docker微服务架构（点击进入运维管理平台）</a> - Copyright &copy; {{year}}
       <a href="https://github.com/ycmbcd/xpy_tdl" target="_blank"><i class="h-icon-github"></i> ycmbcd </a> /
       <span>{{$store.state.pingStatus}}</span>
       <span v-show="$store.state.storeuType === 'admin'" class="red">管理员</span>

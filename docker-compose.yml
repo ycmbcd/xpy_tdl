@@ -21,4 +21,4 @@ services:
     - ./docker/data:/usr/data
     - ./docker/conf/my.cnf:/etc/mysql/my.cnf
     environment:
-    - MYSQL_ROOT_PASSWORD=123456
+    - MYSQL_ROOT_PASSWORD=ycmbcd

@@ -13,7 +13,7 @@ module.exports = merge(common, {
     quiet: false,
     proxy: {
       '/api': {
-        target: 'http://tdl.cc',
+        target: 'http://localhost:888',
         changeOrigin: true,
         // pathRewrite: { '^/api': '/api' }
       }
@@ -34,7 +34,7 @@ module.exports = merge(common, {
       },
       {
         test: /\.(eot|svg|ttf|woff|woff2)(\?\S*)?$/,
-        loader: 'file-loader',
+        loader: 'url-loader',
         options: {
           esModule: false,
           name: './static/fonts/[name]_[hash:6].[ext]',
