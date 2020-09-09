@@ -1,24 +1,30 @@
 version: "3"
 services:
   nginx:
+    restart: always
     image: nginx:alpine
     ports:
-    - 888:80
+      - 80:80
     volumes:
-    - ./FE/dist:/usr/share/nginx/html
-    - ./docker/conf/nginx.conf:/etc/nginx/nginx.conf
-    - ./down:/usr/share/nginx/html/down
+      - ./FE/dist:/usr/share/nginx/html
+      - ./docker/conf/nginx.conf:/etc/nginx/nginx.conf
+      - ./down:/usr/share/nginx/html/down
   php:
+    restart: always
+    environment:
+      - TZ=Asia/Shanghai
     image: bitnami/php-fpm:5.6-ol-7-prod
     volumes:
-    - ./api:/var/www/html/api
-    - ./down:/var/www/html/down
+      - ./api:/var/www/html/api
+      - ./down:/var/www/html/down
   mysql:
+    restart: always
     image: mysql:5.6
     ports:
-    - 33060:3306
+      - 33060:3306
     volumes:
-    - ./docker/data:/usr/data
-    - ./docker/conf/my.cnf:/etc/mysql/my.cnf
+      - ./docker/data:/usr/data
+      - ./docker/conf/my.cnf:/etc/mysql/my.cnf
     environment:
-    - MYSQL_ROOT_PASSWORD=ycmbcd
+      - TZ=Asia/Shanghai
+      - MYSQL_ROOT_PASSWORD=ycmbcd
